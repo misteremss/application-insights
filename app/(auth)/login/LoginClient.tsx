@@ -2,6 +2,7 @@
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import Link from 'next/link'
+import { LogoIcon } from '@/components/Logo'
 
 export function LoginClient() {
   const [loading, setLoading] = useState(false)
@@ -15,11 +16,9 @@ export function LoginClient() {
     <div style={{ minHeight: '100vh', background: 'var(--g-surface)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       {/* Logo */}
       <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', marginBottom: 40 }}>
-        <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--g-blue-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ fontFamily: 'Google Sans', fontSize: 20, fontWeight: 700, color: 'var(--g-blue)' }}>R</span>
-        </div>
+        <LogoIcon size={40} />
         <span style={{ fontFamily: 'Google Sans', fontSize: 22, fontWeight: 500, color: 'var(--g-text)' }}>
-          Review<span style={{ color: 'var(--g-blue)' }}>Reply</span>
+          Star<span style={{ color: 'var(--g-blue)' }}>booster</span>
         </span>
       </Link>
 

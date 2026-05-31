@@ -215,7 +215,7 @@ export function ThemeEditorClient({ theme: initialTheme }: { theme: Theme }) {
           {/* Mock nav */}
           <div style={{ background: theme.navBackground, borderBottom: `1px solid ${theme.borderColor}`, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontFamily: theme.fontSans, fontSize: 15, fontWeight: 600, color: theme.textPrimary }}>
-              Review<span style={{ color: theme.primaryBlue }}>Reply</span>
+              Star<span style={{ color: theme.primaryBlue }}>booster</span>
             </span>
             <div style={{ padding: '6px 14px', borderRadius: `${theme.buttonRadius}px`, background: theme.ctaBackground, color: theme.ctaText, fontFamily: theme.fontSans, fontSize: 12, fontWeight: 500 }}>
               Sign in

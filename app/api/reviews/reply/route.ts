@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 import { postGMBReply, refreshAccessToken } from '@/lib/google-my-business'
 import { supabaseAdmin } from '@/lib/supabase'
 

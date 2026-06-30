@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+.ra-root {
+  --ra-bg: #000000;
+  --ra-orange: #FF5A00;
+  --ra-cyan: #00E5FF;
+  background: var(--ra-bg);
+  color: #f5f5f5;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.ra-serif {
+  font-family: 'Instrument Serif', Georgia, serif;
+}
+
+.ra-mono {
+  font-family: 'Geist Mono', 'SFMono-Regular', monospace;
+}
+
+.ra-glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ra-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.ra-cta {
+  transition: background-color .2s ease, color .2s ease, transform .15s ease;
+}
+.ra-cta:hover {
+  background-color: var(--ra-orange);
+  color: #000;
+  transform: translateY(-1px);
+}
+
+.ra-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ra-cyan);
+  box-shadow: 0 0 0 0 rgba(0,229,255,0.7);
+  animation: ra-pulse 1.6s infinite;
+}
+@keyframes ra-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0,229,255,0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(0,229,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,229,255,0); }
+}
+
+.ra-terminal-line {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.ra-blink::after {
+  content: '\2588';
+  animation: ra-blink 1s steps(1) infinite;
+  color: var(--ra-cyan);
+}
+@keyframes ra-blink {
+  50% { opacity: 0; }
+}

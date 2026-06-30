@@ -1,0 +1,12 @@
+{
+  "name": "Roast Arena",
+  "short_name": "Roast Arena",
+  "description": "AI Fight Club — pit two characters against each other in a cinematic, brutal-roast battle.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

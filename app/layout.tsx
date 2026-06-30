@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import '../styles/globals.css'
 import '../styles/roast-arena.css'
-import { SessionProvider } from '@/components/SessionProvider'
 
 export const metadata: Metadata = {
   title: 'Roast Arena — The Ultimate AI Fight Club',
@@ -29,9 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/logo.svg" />
       </head>
-      <body>
-        <SessionProvider>{children}</SessionProvider>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }

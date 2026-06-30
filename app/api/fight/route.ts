@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 import { runFightSimulation } from '@/lib/agents/fightSupervisor'
 
-// Simple in-memory rate limit (per-IP, resets on cold start). Good enough as a
-// first guardrail; swap for a durable store (Redis/Supabase) before scaling.
 const RATE_LIMIT = 10
 const WINDOW_MS = 60_000
 const hits = new Map<string, { count: number; resetAt: number }>()
@@ -18,6 +17,13 @@ function isRateLimited(ip: string) {
   return entry.count > RATE_LIMIT
 }
 
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!url || !key) return null
+  return createClient(url, key)
+}
+
 export async function POST(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for') ?? 'unknown'
   if (isRateLimited(ip)) {
@@ -27,6 +33,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null)
   const fighterA = String(body?.fighterA ?? '').trim()
   const fighterB = String(body?.fighterB ?? '').trim()
+  const sessionToken = String(body?.sessionToken ?? '').trim()
 
   if (!fighterA || !fighterB) {
     return NextResponse.json({ error: 'Both fighters are required.' }, { status: 400 })
@@ -37,6 +44,20 @@ export async function POST(req: NextRequest) {
 
   try {
     const { result, logs } = await runFightSimulation(fighterA, fighterB)
+
+    // Fire-and-forget cost monitoring log
+    const supabase = getSupabase()
+    if (supabase) {
+      supabase.from('fight_logs').insert({
+        session_token: sessionToken || null,
+        fighter_a: fighterA,
+        fighter_b: fighterB,
+        winner: result.winner,
+        comedy_score: result.comedyScore,
+        steps_taken: logs.filter((l) => l.type === 'act').length,
+      }).then(() => {})
+    }
+
     return NextResponse.json({ result, logs })
   } catch (err) {
     console.error('[fight] simulation failed', err)

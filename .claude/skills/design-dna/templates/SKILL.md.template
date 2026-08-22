@@ -1,0 +1,46 @@
+---
+name: {{slug}}
+description: Produce new {{medium examples, e.g. "posters, slides, social carousels"}} in the "{{name}}" style captured from {{source}}. Use when the user asks for output in this specific look, says "same style as {{name}}", or invokes /{{slug}}. Always attach reference/ image(s) alongside PROMPT.md; never paste dna.json into a prompt.
+---
+
+# {{name}}
+
+{{soul.one_line}}
+
+## How to use this skill
+
+1. Read `PROMPT.md` in this folder in full and attach every image in
+   `reference/` to the same turn — the image carries information the words
+   cannot (style is largely undescribable in text alone). Never generate
+   output from `PROMPT.md` text without the reference image attached.
+2. Generate the requested output following `PROMPT.md` exactly: the weird
+   move, the signature moves as ratios, and the bans are non-negotiable; the
+   archetypes tell you which named layout fits the request.
+3. Before returning anything, run every test in the self-check at the
+   bottom of `PROMPT.md`. Name each test and its result inline. If a test
+   fails, repair the output and re-run the full check — never ship a
+   failing test with an explanation instead of a fix.
+4. For anything not covered by `PROMPT.md` (full colour ramps, exact grid
+   math, motion timing curves, licence details), consult `dna.json` — but
+   never paste `dna.json` itself into a generation prompt; it is reference
+   for you, not payload for the model.
+5. `example/` holds one canonical worked output — use it to sanity-check a
+   new generation by eye before you call it done.
+
+## Files
+
+- `PROMPT.md` — the <=2KB payload. Attach the reference image(s) with it.
+- `dna.json` — the full exhaustive record. Never goes in a prompt.
+- `reference/` — the original design(s) this style was captured from. Keep
+  forever; never delete or replace.
+- `example/` — one worked output proving the spec reproduces the style.
+- `tools/check.py` — runs the `auto: true` tests from `dna.json` against a
+  generated output. Exits non-zero on any failure.
+
+## Maintaining this skill
+
+If output drifts, do not patch it by adding a rule to `PROMPT.md` — check
+whether the drift is really a missing ban first (bans should outnumber
+positive rules). If a genuinely new signature move is needed, something
+else must be cut: `PROMPT.md` stays under 2KB by design, and an uncapped
+prompt just ships indecision instead of a style.

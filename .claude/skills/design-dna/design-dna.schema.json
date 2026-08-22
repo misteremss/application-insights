@@ -1,0 +1,225 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://design-dna.local/schema/dna.json",
+  "title": "Design DNA record",
+  "description": "The full, exhaustive record of a captured design's identity. Never paste this file into a model prompt — it feeds build tools and the human record. The model-facing payload is the separate, <=2KB PROMPT.md compiled from this file.",
+  "type": "object",
+  "required": ["meta", "soul", "palette", "type", "space", "signatures", "weird_move", "bans", "tests"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "Provenance and exclusions.",
+      "required": ["name", "slug", "source", "captured"],
+      "properties": {
+        "name": { "type": "string", "description": "Human-readable style name." },
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "Folder / skill name." },
+        "source": { "type": "array", "items": { "type": "string" }, "description": "Reference file(s) this was captured from." },
+        "captured": { "type": "string", "format": "date", "description": "Date of capture." },
+        "medium_of_origin": { "type": "string", "description": "What the reference actually was: poster, website, deck, video frame, carousel, etc." },
+        "not_copied": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Real logos, wordmarks, licensed photos, or proprietary typefaces excluded from the system. Reproduce the system, never the marks."
+        }
+      }
+    },
+    "soul": {
+      "type": "object",
+      "description": "The compression key. Read this section alone and you are most of the way to the style.",
+      "required": ["one_line", "adjectives"],
+      "properties": {
+        "one_line": { "type": "string", "maxLength": 160, "description": "Concrete nouns, no marketing words." },
+        "adjectives": { "type": "array", "items": { "type": "string" }, "minItems": 3, "maxItems": 5 },
+        "lineage": { "type": "string", "description": "e.g. Swiss editorial, 90s flyer, brutalist." },
+        "read_distance": { "type": "string", "enum": ["thumb", "arms-length", "desk", "room", "street"], "description": "Sets the minimum legible type size." },
+        "energy": {
+          "type": "object",
+          "properties": {
+            "density": { "type": "integer", "minimum": 1, "maximum": 10 },
+            "variance": { "type": "integer", "minimum": 1, "maximum": 10 },
+            "contrast": { "type": "integer", "minimum": 1, "maximum": 10 },
+            "warmth": { "type": "integer", "minimum": 1, "maximum": 10 }
+          }
+        }
+      }
+    },
+    "palette": {
+      "type": "object",
+      "required": ["colors", "coverage"],
+      "properties": {
+        "colors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["role", "hex", "name"],
+            "properties": {
+              "role": { "type": "string", "description": "e.g. ground, ink, accent." },
+              "hex": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+              "name": { "type": "string", "description": "Descriptive name, e.g. 'dusty plum' — never a token name like 'accent-500'." }
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "description": "Approximate percentage of canvas per role. Should sum to ~100. The most-skipped, most-decisive field in the whole document.",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 100 }
+        },
+        "mode": { "type": "string", "description": "e.g. light, dark, both." },
+        "banned": { "type": "array", "items": { "type": "string" }, "description": "Colour behaviours forbidden (gradients, tints, more than one simultaneous accent, etc.)." }
+      }
+    },
+    "type": {
+      "type": "object",
+      "required": ["families", "scale"],
+      "properties": {
+        "families": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["role", "family", "fallback"],
+            "properties": {
+              "role": { "type": "string", "description": "e.g. display, body, mono." },
+              "family": { "type": "string" },
+              "fallback": { "type": "string", "description": "Required. Silent Arial substitution is the most common way a reproduction dies quietly." },
+              "weights": { "type": "array", "items": { "type": "string" } },
+              "licence_risk": { "type": "string" }
+            }
+          }
+        },
+        "scale": {
+          "type": "object",
+          "required": ["display_to_body_ratio"],
+          "properties": {
+            "display_to_body_ratio": { "type": "string", "description": "The typographic signature, e.g. '8:1, never under 6:1'." },
+            "steps": { "type": "array", "items": { "type": "number" } },
+            "max_sizes_per_frame": { "type": "integer" }
+          }
+        },
+        "treatment": {
+          "type": "object",
+          "properties": {
+            "display_tracking": { "type": "string" },
+            "body_leading": { "type": "string" },
+            "case": { "type": "string" },
+            "measure": { "type": "string", "description": "Characters per line for body copy." },
+            "numerals": { "type": "string" }
+          }
+        }
+      }
+    },
+    "space": {
+      "type": "object",
+      "description": "Written as percentages, not pixels, so one file drives any canvas size without a rewrite.",
+      "properties": {
+        "grid": { "type": "string" },
+        "margin_pct": { "type": "number" },
+        "gutter_pct": { "type": "number" },
+        "alignment": { "type": "string" },
+        "rhythm": { "type": "string" },
+        "negative_space": { "type": "string", "description": "Where the emptiness sits and how big it is." },
+        "safe_area": { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+    "surface": {
+      "type": "object",
+      "properties": {
+        "texture": { "type": "string" },
+        "edges": { "type": "string" },
+        "elevation": { "type": "string" },
+        "imagery": { "type": "string" },
+        "iconography": { "type": "string" }
+      }
+    },
+    "signatures": {
+      "type": "array",
+      "description": "3-9 named moves that actually carry the identity, written as ratios or relationships.",
+      "minItems": 3,
+      "maxItems": 9,
+      "items": {
+        "type": "object",
+        "required": ["move", "how"],
+        "properties": {
+          "move": { "type": "string", "description": "Named like a technique." },
+          "how": { "type": "string", "description": "As a ratio or relationship, not a bare value." },
+          "when": { "type": "string" },
+          "never": { "type": "string", "description": "How this move gets used wrong." }
+        }
+      }
+    },
+    "weird_move": {
+      "type": "object",
+      "description": "The single deliberate break in the system. Gets its own top-level key so it can never get buried in a long list.",
+      "required": ["what"],
+      "properties": {
+        "what": { "type": "string" },
+        "how": { "type": "string" },
+        "why": { "type": "string" }
+      }
+    },
+    "archetypes": {
+      "type": "array",
+      "description": "Named layouts, so output #8 sits beside output #1 as a set.",
+      "items": {
+        "type": "object",
+        "required": ["id", "purpose"],
+        "properties": {
+          "id": { "type": "string" },
+          "purpose": { "type": "string" },
+          "anatomy": { "type": "string" },
+          "content_shape": { "type": "string" }
+        }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "description": "Omit entirely for static work.",
+      "properties": {
+        "easing": { "type": "string" },
+        "durations": { "type": "string" },
+        "entrances": { "type": "string" },
+        "never_moves": { "type": "string" },
+        "reduced_motion": { "type": "string" }
+      }
+    },
+    "voice": {
+      "type": "object",
+      "description": "Copy is part of the design. Right layout, wrong sentence, broken look.",
+      "properties": {
+        "register": { "type": "string" },
+        "sentence_length": { "type": "string" },
+        "headline_shape": { "type": "string" },
+        "banned_words": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "bans": {
+      "type": "array",
+      "description": "Minimum 5, written as absolutes. A ban outvotes the training-data average; a permission is one weak vote against it.",
+      "minItems": 5,
+      "items": { "type": "string" }
+    },
+    "tests": {
+      "type": "array",
+      "description": "Minimum 8, binary and measurable. Not tests: 'feels premium', 'looks clean'.",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["id", "check"],
+        "properties": {
+          "id": { "type": "string" },
+          "check": { "type": "string", "description": "The pass/fail condition." },
+          "fail_looks_like": { "type": "string" },
+          "auto": { "type": "boolean", "description": "True if a script can decide this one (see tools/check.py)." }
+        }
+      }
+    },
+    "reconstruction": {
+      "type": "object",
+      "description": "The record of Step 5 — rebuilding the reference from the spec alone. A spec never used for this has never been tested.",
+      "properties": {
+        "attempted": { "type": "boolean" },
+        "gaps_found": { "type": "array", "items": { "type": "string" } },
+        "passes": { "type": "integer", "description": "Number of rebuild/diff/patch rounds run. Expect 2-3." }
+      }
+    }
+  }
+}

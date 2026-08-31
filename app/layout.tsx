@@ -1,32 +1,33 @@
 import type { Metadata } from 'next'
 import '../styles/globals.css'
-import { SessionProvider } from '@/components/SessionProvider'
 
 export const metadata: Metadata = {
-  title: 'Starbooster — Reply to every Google review in 3 seconds',
-  description: 'AI-powered Google review responses for local businesses. Connect your Google Business Profile and reply to every review in one click.',
-  keywords: 'google reviews, review management, AI replies, local business, reputation management',
+  title: 'Holo — Chase the card',
+  description: 'A multivendor trading card marketplace: browse, buy, sell and trade sports and TCG cards with escrow-protected checkout.',
   openGraph: {
-    title: 'Starbooster — Reply to every Google review in 3 seconds',
-    description: 'AI-powered Google review responses for local businesses.',
+    title: 'Holo — Chase the card',
+    description: 'A multivendor trading card marketplace: browse, buy, sell and trade sports and TCG cards with escrow-protected checkout.',
     type: 'website',
   },
+}
+
+export const viewport = {
+  themeColor: '#05050A',
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body>
-        <SessionProvider>{children}</SessionProvider>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
